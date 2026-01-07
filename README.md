@@ -5,24 +5,35 @@ IMRAS (Inventory Management & Reorder Automation System) is a comprehensive web-
 
 Key Features
 
-✅ Real-time Inventory Tracking - Monitor stock levels across multiple warehouses
-🤖 Automated Reordering - Intelligent system automatically generates purchase requisitions
-🏭 Multi-warehouse Support - Manage multiple locations with hierarchical storage
-📦 Batch & Expiry Management - Track batches, lot numbers, and expiration dates
-🔄 FEFO Logic - First-Expired-First-Out for expiry-sensitive items
-📊 Comprehensive Reports - 15+ built-in reports and analytics with Chart.js
-👥 Role-based Access - Three user levels (Admin, Manager, Staff)
-🔍 Complete Audit Trail - Every transaction logged with timestamp and user
-📧 Email Notifications - Automated alerts for low stock, expiring items
+✅ Real-time Inventory Tracking – Monitor stock levels across multiple warehouses
+
+🤖 Automated Reordering – Intelligent system automatically generates purchase requisitions
+
+🏭 Multi-warehouse Support – Manage multiple locations with hierarchical storage
+
+📦 Batch & Expiry Management – Track batches, lot numbers, and expiration dates
+
+🔄 FEFO Logic – First-Expired-First-Out for expiry-sensitive items
+
+📊 Comprehensive Reports – 15+ built-in reports and analytics with Chart.js
+
+👥 Role-based Access – Three user levels (Admin, Manager, Staff)
+
+🔍 Complete Audit Trail – Every transaction logged with timestamp and user
+
+📧 Email Notifications – Automated alerts for low stock, expiring items
 
 🚀 Quick Start
 Prerequisites
 
 Node.js 18.x or higher (LTS recommended)
+
 npm 9.x or higher
+
 MySQL 8.0 or higher
 
 Git
+
 Installation
 Option 1: Automated Setup (Recommended)
 
@@ -40,7 +51,8 @@ npm run dev
 
 # Start frontend (static HTML/JS/React/Vite)
 cd ../frontend
-# If static frontend:
+
+#  static frontend:
 npx http-server -p 3000
 
 
@@ -59,22 +71,27 @@ npm run dev
 
 # Start frontend (static HTML/JS/React/Vite)
 cd ../frontend
-# If static frontend:
+
+# static frontend:
 npx http-server -p 3000
+
 
 Option 2: Manual Setup
 
 Clone the repository
+
 git clone https://github.com/Truptipatil197/imras-project.git
 cd imras-project
 
 
 Install dependencies
+
 cd backend
 npm install
 
 
 Setup environment variables
+
 # Copy example env file
 cp .env.example .env
 
@@ -82,25 +99,34 @@ cp .env.example .env
 
 
 Create MySQL database
+
 mysql -u root -p
 CREATE DATABASE imras_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 EXIT;
 
+
 Run database migrations
+
 npm run migrate
 
+
 Seed initial data (optional)
+
 npm run seed
 
 
 Start the backend
+
 npm run dev          # development mode with auto-reload
+# or
+npm start            # production mode
+
 
 Start the frontend
+
 cd ../frontend
 # Static frontend:
 npx http-server -p 3000
-
 
 Access the application
 
@@ -111,19 +137,16 @@ Open your browser and navigate to: http://localhost:3000
 Admin
 
 Username: admin
-
 Password: newpassword456
 
 Manager
 
 Username: manager1
-
 Password: password123
 
 Staff
 
 Username: staff1
-
 Password: password123
 
 ⚠️ Important: Change these passwords immediately after first login!
@@ -218,9 +241,6 @@ imras-project/
 
 🔧 Configuration
 Environment Variables
-
-Edit .env file:
-
 # Server Configuration
 NODE_ENV=development
 PORT=3000
@@ -255,144 +275,64 @@ MAX_FILE_SIZE=10485760 # 10MB
 UPLOAD_DIR=uploads
 
 📖 Available Scripts
-# Development
-npm run dev              # Start with nodemon (auto-reload)
-npm start                # Start production server
+Development
+npm run dev      # Start with nodemon (auto-reload)
+npm start        # Start production server
 
-# Database
-npm run migrate          # Run migrations
-npm run migrate:undo     # Undo last migration
-npm run seed             # Seed database
-npm run seed:undo        # Undo all seeds
+Database
+npm run migrate         # Run migrations
+npm run migrate:undo    # Undo last migration
+npm run seed            # Seed database
+npm run seed:undo       # Undo all seeds
 
-# Testing
-npm test                 # Run all tests
-npm run test:unit        # Run unit tests
-npm run test:api         # Run API tests
-npm run test:coverage    # Coverage report
+Testing
+npm test                # Run all tests
+npm run test:unit       # Run unit tests
+npm run test:api        # Run API tests
+npm run test:coverage   # Coverage report
 
-# Code Quality
-npm run lint             # Check style
-npm run lint:fix         # Fix style issues
-npm run format           # Format code with Prettier
+Code Quality
+npm run lint            # Check style
+npm run lint:fix        # Fix style issues
+npm run format          # Format code with Prettier
 
-# Setup
-npm run setup            # Automated setup (install + migrate + seed)
+Setup
+npm run setup           # Automated setup (install + migrate + seed)
 
-# Utilities
-npm run logs             # View logs
-npm run clean            # Clean temp files
+Utilities
+npm run logs            # View logs
+npm run clean           # Clean temp files
 
 🔌 API Documentation
 
 Base URL: http://localhost:3000/api/v1
 
-Authentication Endpoints:
+(Tables for Authentication, Inventory, Procurement endpoints as described before)
 
-POST /auth/register - Register new user
-
-POST /auth/login - User login
-
-POST /auth/logout - User logout
-
-POST /auth/refresh - Refresh JWT token
-
-GET /auth/me - Get current user
-
-PUT /auth/password - Change password
-
-Inventory Endpoints:
-
-GET /inventory - Get all items
-
-POST /inventory - Create new item
-
-GET /inventory/:id - Get item by ID
-
-PUT /inventory/:id - Update item
-
-DELETE /inventory/:id - Delete item
-
-GET /inventory/low-stock - Get low stock items
-
-GET /inventory/expiring - Get expiring items
-
-POST /inventory/adjust - Stock adjustment
-
-POST /inventory/transfer - Stock transfer
-
-Procurement Endpoints:
-
-GET /procurement/pr - Get all PRs
-
-POST /procurement/pr - Create PR
-
-PUT /procurement/pr/:id - Update PR
-
-DELETE /procurement/pr/:id - Delete PR
-
-GET /procurement/po - Get all POs
-
-POST /procurement/po - Create PO
-
-PUT /procurement/po/:id - Update PO
-
-GET /procurement/grn - Get all GRNs
-
-POST /procurement/grn - Create GRN
-
-PUT /procurement/grn/:id - Complete GRN
-
-For full API docs, see API_DOCUMENTATION.md
+See API_DOCUMENTATION.md
+ for full details
 
 🧪 Testing
-# Install test dependencies
 npm install
-
-# Run all tests
 npm test
-
-# Run specific test suite
 npm test -- inventory.test.js
-
-# Run with coverage
 npm run test:coverage
-
-# Watch mode for development
 npm test -- --watch
 
 🐛 Troubleshooting
 
-1. Database Connection Error
-Error: connect ECONNREFUSED 127.0.0.1:3306
+Database Connection Error → Ensure MySQL is running
 
-Ensure MySQL is running and credentials in .env are correct.
+Port Already in Use → Change port or kill process using port
 
-2. Port Already in Use
-Error: EADDRINUSE: address already in use :::3000
+JWT Secret Missing → Ensure .env has JWT_SECRET
 
-Change port in .env or kill process using port 3000.
+Module Not Found → Run npm install
 
-3. JWT Secret Missing
-Error: JWT_SECRET is not defined
-
-Ensure .env exists and has JWT_SECRET.
-
-4. Module Not Found
-Error: Cannot find module 'express'
-
-Run npm install to install dependencies.
-
-5. Migration Errors
-Error: Table 'users' already exists
-
-Reset database:
-
-npm run migrate:undo:all
-npm run migrate
+Migration Errors → Run npm run migrate:undo:all then npm run migrate
 
 Deployment
-Production Deployment
+Production
 export NODE_ENV=production
 npm ci --production
 npm install -g pm2
@@ -400,35 +340,27 @@ pm2 start server.js --name imras-api
 pm2 save
 pm2 startup
 
-Docker Deployment
+Docker
 docker build -t imras:latest .
 docker-compose up -d
 
 Contributing
 
-Fork the repository
+Fork repository
 
-Create a feature branch: git checkout -b feature/AmazingFeature
+Create feature branch
 
-Commit changes: git commit -m 'Add some AmazingFeature'
+Commit changes
 
-Push branch: git push origin feature/AmazingFeature
+Push branch
 
-Open a Pull Request
+Open Pull Request
 
-Code Style:
-
-Use ESLint
-
-Follow Airbnb JavaScript Style Guide
-
-Use Prettier
-
-Write meaningful commit messages
+Code Style: ESLint, Airbnb JS Guide, Prettier
 
 📄 License
 
-MIT License - see LICENSE
+MIT License – see LICENSE
 
 Authors
 
@@ -436,15 +368,7 @@ Trupti Patil – Initial work – GitHub
 
 Acknowledgments
 
-Express.js
-
-Sequelize
-
-Chart.js
-
-Bootstrap / Tailwind
-
-All contributors
+Express.js | Sequelize | Chart.js | Bootstrap / Tailwind | All contributors
 
 Version: 1.0.0
 Last Updated: January 2026
