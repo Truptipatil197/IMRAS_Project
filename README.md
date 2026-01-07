@@ -1,17 +1,6 @@
 \# IMRAS - Inventory Management \& Reorder Automation System
 
 
-
-\[!\[Node.js](https://img.shields.io/badge/Node.js-18.x-green.svg)](https://nodejs.org/)
-
-\[!\[Express](https://img.shields.io/badge/Express-4.18-blue.svg)](https://expressjs.com/)
-
-\[!\[MySQL](https://img.shields.io/badge/MySQL-8.0+-orange.svg)](https://www.mysql.com/)
-
-\[!\[License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-
-
 \## 📋 Overview
 
 
