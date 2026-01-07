@@ -930,24 +930,6 @@ This project is licensed under the MIT License - see the \[LICENSE](LICENSE) fil
 
 
 
-\## 🔗 Links
-
-
-
-\- \[Project Homepage](https://github.com/Truptipatil197/imras)
-
-\- \[Issue Tracker](https://github.com/Truptipatil197/imras/issues)
-
-\- \[Documentation](https://github.com/Truptipatil197/imras/wiki)
-
-\- \[API Docs](docs/API\_DOCUMENTATION.md)
-
-
-
----
-
-
-
 \*\*Version:\*\* 1.0.0  
 
 \*\*Last Updated:\*\* January 2026
