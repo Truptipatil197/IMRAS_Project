@@ -1,0 +1,109 @@
+# ============================================
+# IMRAS .gitignore
+# ============================================
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+.env.production
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs
+lib-cov
+
+# Coverage directory
+coverage/
+*.lcov
+.nyc_output
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Reports
+reports/*
+!reports/.gitkeep
+
+# Backups
+backups/*
+!backups/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# OS
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Testing
+.jest/
+coverage/
+
+# Build
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+temp/
+cache/
+
+# Database
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+database_setup_complete.flag
+
+# PM2
+.pm2/
+ecosystem.config.js
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Misc
+*.pem
+.DS_Store
+*.local
