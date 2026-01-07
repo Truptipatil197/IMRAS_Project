@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard - IMRAS</title>
+    
+    <!-- Bootstrap 5.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="d-none d-md-flex flex-grow-1 mx-4">
+                <div class="input-group search-bar">
+                    <span class="input-group-text bg-white border-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-0" placeholder="Search...">
+                </div>
+            </div>
+
+            <div class="navbar-nav ms-auto flex-row align-items-center">
+                <div class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative text-white" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-clipboard-check text-info me-2"></i>New GRN to process</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar me-2">
+                            <i class="fas fa-user-circle fa-2x"></i>
+                        </div>
+                        <div class="d-none d-md-block text-start">
+                            <div class="user-name" id="userName">Loading...</div>
+                            <div class="user-role small" id="userRole">-</div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+            <button class="btn btn-link text-white d-none d-lg-block" id="sidebarCollapse" aria-label="Collapse sidebar">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="staff-dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="grn.html">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>GRN</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="stock-movement.html">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Stock Movement</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="stock-reconciliation-report.html">
+                        <i class="fas fa-tasks"></i>
+                        <span>Stock Count</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <span>Version 1.0.0</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Staff</li>
+                </ol>
+            </nav>
+
+            <!-- Welcome Section -->
+            <div class="welcome-section mb-4">
+                <h2>Welcome back, <span id="welcomeUserName">Staff</span>! 👋</h2>
+                <p class="text-muted">Manage GRNs, stock movements, and physical counts.</p>
+            </div>
+
+            <!-- Quick Stock Search (prominent) -->
+            <div class="search-section mb-4 position-relative">
+                <div class="input-group input-group-lg">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" id="quickSearch" 
+                           placeholder="Search by SKU or item name..." autocomplete="off">
+                </div>
+                <div id="searchResults" class="search-results"></div>
+            </div>
+
+            <!-- Stats Cards (3 cards) -->
+            <div class="row g-3 mb-4" id="staffStatsCards">
+                <!-- Stats cards will be generated here -->
+            </div>
+
+            <!-- Pending GRNs -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title">
+                                <i class="fas fa-clipboard-check me-2"></i>
+                                Pending GRNs
+                            </h5>
+                            <button class="btn btn-sm btn-primary" onclick="createNewGRN()">
+                                <i class="fas fa-plus me-2"></i>Create New GRN
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="grnTable">
+                                    <thead>
+                                        <tr>
+                                            <th>GRN Number</th>
+                                            <th>PO Number</th>
+                                            <th>Supplier</th>
+                                            <th>Expected Date</th>
+                                            <th>Items Count</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="grnTableBody">
+                                        <!-- GRN table rows will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Two Column: Recent Movements + Stock Count Tasks -->
+            <div class="row g-3">
+                <div class="col-lg-8">
+                    <!-- Recent Stock Movements -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-exchange-alt me-2"></i>
+                                Recent Stock Movements
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="recentMovements">
+                                <!-- Recent movements will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <!-- Stock Count Tasks -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">
+                                <i class="fas fa-tasks me-2"></i>
+                                Stock Count Tasks
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="stockCountTasks">
+                                <!-- Stock count tasks will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/staff-dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reorder Alert Report - IMRAS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/reports.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="admin-dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="reports-dashboard.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports & Analytics</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mt-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="reports-dashboard.html">Reports</a></li>
+                    <li class="breadcrumb-item active">Reorder Alerts</li>
+                </ol>
+            </nav>
+            
+            <!-- Report Header -->
+            <div class="report-header mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2><i class="fas fa-exclamation-triangle text-warning"></i> Reorder Alert Report</h2>
+                        <p class="text-muted">Items requiring immediate attention</p>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn btn-success" onclick="exportToExcel()">
+                            <i class="fas fa-file-excel"></i> Excel
+                        </button>
+                        <button class="btn btn-danger" onclick="exportToPDF()">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </button>
+                        <button class="btn btn-primary" onclick="bulkCreatePR()">
+                            <i class="fas fa-shopping-cart"></i> Create PRs
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Alert Summary -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="alert-summary-card critical">
+                        <h3 id="criticalCount">0</h3>
+                        <p>Critical (Out of Stock)</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert-summary-card urgent">
+                        <h3 id="urgentCount">0</h3>
+                        <p>Urgent (Below Reorder Point)</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert-summary-card warning">
+                        <h3 id="warningCount">0</h3>
+                        <p>Warning (At Reorder Point)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Reorder Alerts Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Items Needing Reorder</h5>
+                </div>
+                <div class="card-body">
+                    <table id="reorderAlertTable" class="table table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="selectAll" title="Select All">
+                                </th>
+                                <th>Priority</th>
+                                <th>SKU</th>
+                                <th>Item Name</th>
+                                <th>Current Stock</th>
+                                <th>Reorder Point</th>
+                                <th>Safety Stock</th>
+                                <th>Recommended Qty</th>
+                                <th>Lead Time</th>
+                                <th>Preferred Supplier</th>
+                                <th>Est. Cost</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/reorder-alert-report.js"></script>
+</body>
+</html>
+

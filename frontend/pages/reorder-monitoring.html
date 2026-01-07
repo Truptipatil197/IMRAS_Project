@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reorder Monitoring - IMRAS</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/reorder-monitoring.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar me-2">
+                            <i class="fas fa-user-circle fa-2x"></i>
+                        </div>
+                        <div class="d-none d-md-block text-start">
+                            <div class="user-name" id="userName">Loading...</div>
+                            <div class="user-role small" id="userRole">-</div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+            <button class="btn btn-link text-white d-none d-lg-block" id="sidebarCollapse">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="admin-dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="reorder-monitoring.html">
+                        <i class="fas fa-robot"></i>
+                        <span>Reorder Automation</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="inventory.html">
+                        <i class="fas fa-box"></i>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="admin-dashboard.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Reorder Monitoring</li>
+            </ol>
+        </nav>
+        
+        <!-- Page Header -->
+        <div class="page-header mb-4">
+            <div>
+                <h2><i class="fas fa-robot"></i> Reorder Automation Monitoring</h2>
+                <p class="text-muted">Monitor and control automated reorder system</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline-primary" id="refreshBtn">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+        </div>
+        
+        <!-- Scheduler Status Card -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-clock"></i> Scheduler Status</h5>
+                <div class="scheduler-status-badge" id="schedulerStatusBadge">
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Loading...
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <label>Status:</label>
+                            <div class="status-value" id="schedulerStatus">
+                                <span class="spinner-border spinner-border-sm"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <label>Last Run:</label>
+                            <div class="status-value" id="lastRun">-</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <label>Next Run:</label>
+                            <div class="status-value" id="nextRun">-</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="status-item">
+                            <label>Schedule:</label>
+                            <div class="status-value" id="schedulePattern">-</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <!-- Control Buttons (Admin Only) -->
+                <div class="text-center" id="schedulerControls" style="display: none;">
+                    <button class="btn btn-success me-2" id="startSchedulerBtn">
+                        <i class="fas fa-play"></i> Start Scheduler
+                    </button>
+                    <button class="btn btn-danger me-2" id="stopSchedulerBtn">
+                        <i class="fas fa-stop"></i> Stop Scheduler
+                    </button>
+                    <button class="btn btn-primary me-2" id="runNowBtn">
+                        <i class="fas fa-play-circle"></i> Run Now
+                    </button>
+                    <button class="btn btn-outline-secondary" id="configSchedulerBtn">
+                        <i class="fas fa-cog"></i> Configure
+                    </button>
+                </div>
+                
+                <!-- Manager/Staff View -->
+                <div class="text-center" id="managerControls" style="display: none;">
+                    <button class="btn btn-primary" id="runNowBtnManager">
+                        <i class="fas fa-play-circle"></i> Trigger Manual Check
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Metrics Dashboard -->
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 id="totalExecutions">0</h3>
+                        <p>Total Runs (7d)</p>
+                        <small class="text-success" id="successRate">0% Success Rate</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-primary">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 id="totalPRsGenerated">0</h3>
+                        <p>PRs Generated (7d)</p>
+                        <small class="text-muted" id="pendingPRs">0 Pending Approval</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 id="criticalItems">0</h3>
+                        <p>Critical Items</p>
+                        <small class="text-warning" id="warningItems">0 Warning Level</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-3">
+                <div class="metric-card">
+                    <div class="metric-icon bg-info">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="metric-content">
+                        <h3 id="avgExecutionTime">0ms</h3>
+                        <p>Avg Execution Time</p>
+                        <small class="text-muted" id="pendingQueue">0 in Queue</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-lg-8 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-line"></i> Execution History</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="executionHistoryChart" height="80"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Status Distribution</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="statusDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Critical Items Alert -->
+        <div class="card shadow-sm mb-4" id="criticalItemsCard">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    Critical Stock Alerts
+                    <span class="badge bg-white text-danger" id="criticalItemsCount">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>SKU</th>
+                                <th>Current Stock</th>
+                                <th>Reorder Point</th>
+                                <th>Days Until Stockout</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="criticalItemsTableBody">
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Auto-Generated PRs -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-robot"></i> 
+                    Recent Auto-Generated Purchase Requisitions
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>PR Number</th>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Supplier</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentPRsTableBody">
+                            <tr>
+                                <td colspan="8" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Execution Logs -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i> 
+                    Execution History
+                </h5>
+                <div>
+                    <select class="form-select form-select-sm" id="logStatusFilter" style="width: 150px;">
+                        <option value="">All Status</option>
+                        <option value="success">Success</option>
+                        <option value="failed">Failed</option>
+                        <option value="running">Running</option>
+                    </select>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Started At</th>
+                                <th>Status</th>
+                                <th>Items Processed</th>
+                                <th>Items Eligible</th>
+                                <th>PRs Generated</th>
+                                <th>Alerts Created</th>
+                                <th>Execution Time</th>
+                                <th>Triggered By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="executionLogsTableBody">
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer">
+                    <nav>
+                        <ul class="pagination pagination-sm mb-0" id="executionLogsPagination">
+                            <!-- Pagination will be inserted here -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reorder Queue -->
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list"></i> 
+                    Reorder Queue
+                    <span class="badge bg-secondary" id="queueCount">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>SKU</th>
+                                <th>Warehouse</th>
+                                <th>Current Stock</th>
+                                <th>Suggested Qty</th>
+                                <th>Priority Score</th>
+                                <th>Status</th>
+                                <th>PR Number</th>
+                                <th>Created</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reorderQueueTableBody">
+                            <tr>
+                                <td colspan="9" class="text-center">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scheduler Configuration Modal -->
+    <div class="modal fade" id="schedulerConfigModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-cog"></i> Scheduler Configuration
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="schedulerConfigForm">
+                        <div class="mb-3">
+                            <label class="form-label">Schedule Pattern (Cron)</label>
+                            <input type="text" class="form-control" id="scheduleInput" 
+                                   placeholder="0 * * * *" required>
+                            <small class="form-text text-muted">
+                                Examples: 0 * * * * (every hour), 0 */2 * * * (every 2 hours)
+                            </small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Batch Size</label>
+                            <input type="number" class="form-control" id="batchSizeInput" 
+                                   value="50" min="10" max="500" required>
+                            <small class="form-text text-muted">
+                                Number of items to process per queue batch
+                            </small>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" 
+                                       id="enabledInput" checked>
+                                <label class="form-check-label" for="enabledInput">
+                                    Enable Scheduler
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveConfigBtn">
+                        <i class="fas fa-save"></i> Save Configuration
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Log Details Modal -->
+    <div class="modal fade" id="logDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-info-circle"></i> Execution Details
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="logDetailsContent">
+                    <!-- Details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../js/config.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/reorder-monitoring.js"></script>
+</body>
+</html>

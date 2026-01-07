@@ -1,0 +1,110 @@
+/* ===== GRN PAGE STYLES ===== */
+
+/* Pending PO Cards */
+.pending-po-card {
+    border-left: 4px solid #FFC107;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.pending-po-card:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.pending-po-card.overdue {
+    border-left-color: #DC3545;
+}
+
+.po-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+
+.po-details h5 {
+    margin-bottom: 5px;
+    color: #4A90E2;
+}
+
+.po-meta {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.po-meta .badge {
+    margin-left: 5px;
+}
+
+/* Items Receipt Table */
+#itemsTable input[type="number"] {
+    width: 80px;
+    padding: 5px;
+}
+
+#itemsTable input[type="text"] {
+    width: 120px;
+}
+
+#itemsTable .form-control {
+    font-size: 0.9rem;
+}
+
+.item-row {
+    vertical-align: middle;
+}
+
+.item-row.has-rejection {
+    background-color: #FFF3CD;
+}
+
+.qty-validation-error {
+    border-color: #DC3545 !important;
+    animation: shake 0.3s;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Real-time Balance Display */
+.balance-indicator {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.balance-indicator.valid {
+    background-color: #D4EDDA;
+    color: #155724;
+}
+
+.balance-indicator.invalid {
+    background-color: #F8D7DA;
+    color: #721C24;
+}
+
+/* Status Badges */
+.status-draft {
+    background-color: #FFC107;
+    color: #000;
+}
+
+.status-completed {
+    background-color: #28A745;
+}
+
+/* Batch Input Highlighting */
+.batch-required {
+    border: 2px dashed #FFC107;
+}
+
+.batch-required:focus {
+    border-color: #FF9800;
+}
+

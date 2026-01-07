@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - IMRAS</title>
+    <meta http-equiv="refresh" content="0; url=reports-dashboard.html">
+</head>
+<body>
+    <script>
+        // Fallback redirect in case meta refresh is blocked
+        (function() {
+            var target = 'reports-dashboard.html';
+            try {
+                if (window.location.pathname && window.location.pathname.indexOf('frontend/') === -1) {
+                    window.location.href = 'pages/' + target;
+                } else {
+                    window.location.href = target;
+                }
+            } catch (e) {
+                window.location.href = target;
+            }
+        })();
+    </script>
+</body>
+</html>
+

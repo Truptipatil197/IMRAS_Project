@@ -1,0 +1,413 @@
+/**
+ * IMRAS - Notification System Styles
+ * Beautiful toast notifications with animations
+ */
+
+/* Notification Container */
+.notification-container {
+    position: fixed;
+    z-index: 9999;
+    pointer-events: none;
+    max-width: 400px;
+}
+
+/* Position Variants */
+.notification-container.top-right {
+    top: 80px;
+    right: 20px;
+}
+
+.notification-container.top-center {
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.notification-container.top-left {
+    top: 80px;
+    left: 20px;
+}
+
+.notification-container.bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.notification-container.bottom-center {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.notification-container.bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+/* Toast Base Styles */
+.toast {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 16px;
+    margin-bottom: 12px;
+    min-width: 300px;
+    max-width: 400px;
+    pointer-events: all;
+    display: flex;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+/* Toast Type Colors */
+.toast.success {
+    border-left: 4px solid #28a745;
+}
+
+.toast.success .toast-icon {
+    color: #28a745;
+}
+
+.toast.error {
+    border-left: 4px solid #dc3545;
+}
+
+.toast.error .toast-icon {
+    color: #dc3545;
+}
+
+.toast.warning {
+    border-left: 4px solid #ffc107;
+}
+
+.toast.warning .toast-icon {
+    color: #ffc107;
+}
+
+.toast.info {
+    border-left: 4px solid #17a2b8;
+}
+
+.toast.info .toast-icon {
+    color: #17a2b8;
+}
+
+.toast.loading {
+    border-left: 4px solid #6c757d;
+}
+
+.toast.loading .toast-icon {
+    color: #6c757d;
+}
+
+/* Toast Icon */
+.toast-icon {
+    font-size: 20px;
+    margin-right: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Toast Content */
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 4px;
+    color: #333;
+}
+
+.toast-message {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+/* Toast Actions */
+.toast-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+}
+
+.toast-action-btn {
+    padding: 4px 12px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    background: #f0f0f0;
+    color: #333;
+    transition: background 0.2s;
+}
+
+.toast-action-btn:hover {
+    background: #e0e0e0;
+}
+
+.toast-action-btn.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.toast-action-btn.btn-primary:hover {
+    background: #0056b3;
+}
+
+/* Toast Close Button */
+.toast-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0;
+    margin-left: 12px;
+    flex-shrink: 0;
+    color: #666;
+    font-size: 16px;
+    transition: opacity 0.2s;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-close:hover {
+    opacity: 1;
+}
+
+/* Progress Bar */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.1);
+    width: 100%;
+    transform-origin: left;
+    animation: progress linear;
+}
+
+.toast.success .toast-progress {
+    background: rgba(40, 167, 69, 0.3);
+}
+
+.toast.error .toast-progress {
+    background: rgba(220, 53, 69, 0.3);
+}
+
+.toast.warning .toast-progress {
+    background: rgba(255, 193, 7, 0.3);
+}
+
+.toast.info .toast-progress {
+    background: rgba(23, 162, 184, 0.3);
+}
+
+@keyframes progress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+/* Confirmation Modal */
+.notification-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: all;
+}
+
+.notification-modal-overlay.show {
+    opacity: 1;
+}
+
+.notification-modal {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.notification-modal-overlay.show .notification-modal {
+    transform: scale(1);
+}
+
+.notification-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notification-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.notification-modal-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.5;
+    padding: 0;
+    font-size: 20px;
+    color: #666;
+    transition: opacity 0.2s;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.notification-modal-close:hover {
+    opacity: 1;
+}
+
+.notification-modal-body {
+    padding: 20px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.notification-modal-footer {
+    padding: 20px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.notification-modal-footer .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notification-modal-footer .btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.notification-modal-footer .btn-primary:hover {
+    background: #0056b3;
+}
+
+.notification-modal-footer .btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.notification-modal-footer .btn-secondary:hover {
+    background: #5a6268;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .notification-container {
+        max-width: calc(100% - 40px);
+    }
+
+    .toast {
+        min-width: auto;
+        max-width: 100%;
+    }
+
+    .notification-container.top-right,
+    .notification-container.top-left,
+    .notification-container.bottom-right,
+    .notification-container.bottom-left {
+        right: 20px;
+        left: 20px;
+        transform: none;
+    }
+
+    .notification-container.top-center,
+    .notification-container.bottom-center {
+        left: 20px;
+        right: 20px;
+        transform: none;
+    }
+}
+
+/* Animation for slide in from different positions */
+.notification-container.top-left .toast,
+.notification-container.bottom-left .toast {
+    transform: translateX(-100%);
+}
+
+.notification-container.top-left .toast.show,
+.notification-container.bottom-left .toast.show {
+    transform: translateX(0);
+}
+
+.notification-container.top-left .toast.hide,
+.notification-container.bottom-left .toast.hide {
+    transform: translateX(-100%);
+}
+
+.notification-container.top-center .toast,
+.notification-container.bottom-center .toast {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+}
+
+.notification-container.top-center .toast.show,
+.notification-container.bottom-center .toast.show {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.notification-container.top-center .toast.hide,
+.notification-container.bottom-center .toast.hide {
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+}
+
