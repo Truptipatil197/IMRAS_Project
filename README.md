@@ -73,15 +73,20 @@ IMRAS (Inventory Management \& Reorder Automation System) is a comprehensive web
 \*\*Windows:\*\*
 
 ```bash
+git clone https://github.com/Truptipatil197/imras-project.git
+cd imras-project
 
-git clone https://github.com/yourusername/imras.git
+# Run setup script (installs backend dependencies)
+setup.bat
 
-cd imras
+# Start backend
+cd backend
+npm run dev
 
-npm run setup
-
-npm start
-
+# Start frontend (static HTML/JS/React/Vite)
+cd ../frontend
+# If static frontend:
+npx http-server -p 3000
 ```
 
 
@@ -90,15 +95,21 @@ npm start
 
 ```bash
 
-git clone https://github.com/yourusername/imras.git
+git clone https://github.com/Truptipatil197/imras-project.git
+cd imras-project
 
-cd imras
-
+# Make setup script executable
 chmod +x setup.sh
-
 ./setup.sh
 
-npm start
+# Start backend
+cd backend
+npm run dev
+
+# Start frontend (static HTML/JS/React/Vite)
+cd ../frontend
+# If static frontend:
+npx http-server -p 3000
 
 ```
 
@@ -108,95 +119,55 @@ npm start
 
 
 
-1\. \*\*Clone the repository\*\*
+Clone the repository
 
-```bash
-
-&nbsp;  git clone https://github.com/yourusername/imras.git
-
-&nbsp;  cd imras
-
-```
+git clone https://github.com/Truptipatil197/imras-project.git
+cd imras-project
 
 
+Install dependencies
 
-2\. \*\*Install dependencies\*\*
-
-```bash
-
-&nbsp;  npm install
-
-```
+cd backend
+npm install
 
 
+Setup environment variables
 
-3\. \*\*Setup environment variables\*\*
+# Copy example env file
+cp .env.example .env
 
-```bash
-
-&nbsp;  # Copy the example environment file
-
-&nbsp;  cp .env.example .env
-
-&nbsp;  
-
-&nbsp;  # Edit .env with your configuration
-
-&nbsp;  # Update database credentials, JWT secret, email settings, etc.
-
-```
+# Edit .env to update database credentials, JWT secret, email settings, etc.
 
 
+Create MySQL database
 
-4\. \*\*Create MySQL database\*\*
-
-```sql
-
-&nbsp;  mysql -u root -p
-
-&nbsp;  CREATE DATABASE imras\_db CHARACTER SET utf8mb4 COLLATE utf8mb4\_unicode\_ci;
-
-&nbsp;  EXIT;
-
-```
+mysql -u root -p
+CREATE DATABASE imras_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+EXIT;
 
 
+Run database migrations
 
-5\. \*\*Run database migrations\*\*
-
-```bash
-
-&nbsp;  npm run migrate
-
-```
+npm run migrate
 
 
+Seed initial data (optional)
 
-6\. \*\*Seed initial data (optional)\*\*
-
-```bash
-
-&nbsp;  npm run seed
-
-```
+npm run seed
 
 
+Start the backend
 
-7\. \*\*Start the application\*\*
+npm run dev       # development mode with auto-reload
+# or
+npm start         # production mode
 
-```bash
 
-&nbsp;  # Development mode with auto-reload
+Start the frontend
 
-&nbsp;  npm run dev
-
-&nbsp;  
-
-&nbsp;  # Production mode
-
-&nbsp;  npm start
-
-```
+cd ../frontend
+# Static frontend:
+npx http-server -p 3000
 
 
 
