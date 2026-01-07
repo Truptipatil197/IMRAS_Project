@@ -368,7 +368,7 @@ Trupti Patil – Initial work – GitHub
 
 Acknowledgments
 
-Express.js | Sequelize | Chart.js | Bootstrap / Tailwind | All contributors
+Express.js | Sequelize | Chart.js | Bootstrap / Tailwind 
 
 Version: 1.0.0
 Last Updated: January 2026
