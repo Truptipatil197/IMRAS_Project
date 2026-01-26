@@ -1,0 +1,100 @@
+/* ===== STOCK LEDGER STYLES ===== */
+
+/* Ledger Table Styling */
+#ledgerTable {
+    font-size: 0.9rem;
+}
+
+#ledgerTable tbody tr:hover {
+    background-color: #F1F3F5;
+}
+
+/* Transaction Type Column Colors */
+.ledger-type-grn {
+    color: #28A745;
+    font-weight: 600;
+}
+
+.ledger-type-transfer {
+    color: #17A2B8;
+    font-weight: 600;
+}
+
+.ledger-type-issue {
+    color: #FF9800;
+    font-weight: 600;
+}
+
+.ledger-type-adjustment {
+    color: #6F42C1;
+    font-weight: 600;
+}
+
+/* Quantity Column */
+.stock-up-tick {
+    color: #28A745;
+    font-weight: 600;
+}
+
+.stock-down-tick {
+    color: #DC3545;
+    font-weight: 600;
+}
+
+/* Balance Column */
+.balance-column {
+    font-weight: 700;
+    background-color: #FFF9E6;
+}
+
+.balance-low {
+    color: #FF9800;
+}
+
+.balance-critical {
+    color: #DC3545;
+}
+
+/* Reference Links */
+.reference-link {
+    color: #4A90E2;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.reference-link:hover {
+    text-decoration: underline;
+}
+
+/* Transaction Timeline (in modal) */
+.transaction-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.transaction-timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #DEE2E6;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4A90E2;
+    border: 2px solid white;
+}

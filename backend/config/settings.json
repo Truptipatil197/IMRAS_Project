@@ -1,0 +1,22 @@
+{
+  "reorder_schedule": {
+    "frequency": "disabled",
+    "run_time": "09:00",
+    "auto_create_prs": false,
+    "email_notifications": false,
+    "exclude_weekends": false,
+    "next_run": null,
+    "updated_at": "2026-01-25T17:29:51.256Z",
+    "updated_by": 1
+  },
+  "default_reorder_point": 10,
+  "default_safety_stock": 20,
+  "enable_batch_tracking": true,
+  "enable_serial_tracking": false,
+  "updated_at": "2026-01-26T10:19:26.764Z",
+  "updated_by": 1,
+  "enable_auto_reorder": true,
+  "reorder_check_frequency": "hourly",
+  "auto_approve_prs": false,
+  "last_backup": "2026-01-26T10:19:51.419Z"
+}

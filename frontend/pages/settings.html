@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - IMRAS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    
+    <style>
+        .settings-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .settings-section h4 {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .setting-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .setting-description {
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin-dashboard.html">
+                <i class="fas fa-boxes"></i> IMRAS
+            </a>
+            <span class="navbar-text text-white">
+                System Settings
+            </span>
+            <div class="ms-auto">
+                <button class="btn btn-outline-light" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- Settings Navigation -->
+                <div class="list-group">
+                    <a href="#general" class="list-group-item list-group-item-action active" data-tab="general">
+                        <i class="fas fa-cog"></i> General Settings
+                    </a>
+                    <a href="#inventory" class="list-group-item list-group-item-action" data-tab="inventory">
+                        <i class="fas fa-boxes"></i> Inventory Settings
+                    </a>
+                    <a href="#reorder" class="list-group-item list-group-item-action" data-tab="reorder">
+                        <i class="fas fa-sync-alt"></i> Reorder Automation
+                    </a>
+                    <a href="#notifications" class="list-group-item list-group-item-action" data-tab="notifications">
+                        <i class="fas fa-bell"></i> Notifications
+                    </a>
+                    <a href="#security" class="list-group-item list-group-item-action" data-tab="security">
+                        <i class="fas fa-shield-alt"></i> Security
+                    </a>
+                    <a href="#backup" class="list-group-item list-group-item-action" data-tab="backup">
+                        <i class="fas fa-database"></i> Backup & Restore
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <!-- General Settings -->
+                <div class="settings-section" id="general-section">
+                    <h4><i class="fas fa-cog"></i> General Settings</h4>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Company Name</div>
+                                <div class="setting-description">Your organization name</div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" id="companyName" placeholder="Enter company name">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">System Currency</div>
+                                <div class="setting-description">Default currency for all transactions</div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="currency">
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Date Format</div>
+                                <div class="setting-description">How dates are displayed</div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="dateFormat">
+                                    <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                                    <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                                    <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-3" onclick="saveGeneralSettings()">
+                        <i class="fas fa-save"></i> Save General Settings
+                    </button>
+                </div>
+
+                <!-- Inventory Settings -->
+                <div class="settings-section d-none" id="inventory-section">
+                    <h4><i class="fas fa-boxes"></i> Inventory Settings</h4>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Default Reorder Point</div>
+                                <div class="setting-description">Minimum stock level before reorder alert</div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" class="form-control" id="defaultReorderPoint" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Default Safety Stock</div>
+                                <div class="setting-description">Extra stock buffer for emergencies</div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" class="form-control" id="defaultSafetyStock" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Enable Batch Tracking</div>
+                                <div class="setting-description">Track items by batch/lot numbers</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="enableBatchTracking">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Enable Serial Number Tracking</div>
+                                <div class="setting-description">Track individual items by serial numbers</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="enableSerialTracking">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-3" onclick="saveInventorySettings()">
+                        <i class="fas fa-save"></i> Save Inventory Settings
+                    </button>
+                </div>
+
+                <!-- Reorder Automation -->
+                <div class="settings-section d-none" id="reorder-section">
+                    <h4><i class="fas fa-sync-alt"></i> Reorder Automation Settings</h4>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Enable Auto-Reorder</div>
+                                <div class="setting-description">Automatically create PRs when stock is low</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="enableAutoReorder">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Auto-Reorder Check Frequency</div>
+                                <div class="setting-description">How often system checks for low stock</div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="reorderCheckFrequency">
+                                    <option value="hourly">Every Hour</option>
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Auto-Approve PRs</div>
+                                <div class="setting-description">Automatically approve generated PRs</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoApprovePRs">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-3" onclick="saveReorderSettings()">
+                        <i class="fas fa-save"></i> Save Reorder Settings
+                    </button>
+                    
+                    <hr class="my-4">
+                    
+                    <h5>Manual Triggers</h5>
+                    <button class="btn btn-success" onclick="triggerReorderCheck()">
+                        <i class="fas fa-sync"></i> Run Reorder Check Now
+                    </button>
+                </div>
+
+                <!-- Notifications -->
+                <div class="settings-section d-none" id="notifications-section">
+                    <h4><i class="fas fa-bell"></i> Notification Settings</h4>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Email Notifications</div>
+                                <div class="setting-description">Send email alerts for important events</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="emailNotifications">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Low Stock Alerts</div>
+                                <div class="setting-description">Notify when items reach reorder point</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="lowStockAlerts">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Expiry Alerts</div>
+                                <div class="setting-description">Notify about expiring items</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="expiryAlerts">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-3" onclick="saveNotificationSettings()">
+                        <i class="fas fa-save"></i> Save Notification Settings
+                    </button>
+                </div>
+
+                <!-- Security -->
+                <div class="settings-section d-none" id="security-section">
+                    <h4><i class="fas fa-shield-alt"></i> Security Settings</h4>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Session Timeout (minutes)</div>
+                                <div class="setting-description">Auto-logout after inactivity</div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" class="form-control" id="sessionTimeout" placeholder="30">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Require Password Change</div>
+                                <div class="setting-description">Days before password expires</div>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" class="form-control" id="passwordExpiry" placeholder="90">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary mt-3" onclick="saveSecuritySettings()">
+                        <i class="fas fa-save"></i> Save Security Settings
+                    </button>
+                </div>
+
+                <!-- Backup & Restore -->
+                <div class="settings-section d-none" id="backup-section">
+                    <h4><i class="fas fa-database"></i> Backup & Restore</h4>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Regular backups ensure data safety. Last backup: <strong id="lastBackup">Never</strong>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button class="btn btn-success w-100 mb-3" onclick="createBackup()">
+                                <i class="fas fa-download"></i> Create Backup Now
+                            </button>
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-warning w-100 mb-3" onclick="document.getElementById('restoreFile').click()">
+                                <i class="fas fa-upload"></i> Restore from Backup
+                            </button>
+                            <input type="file" id="restoreFile" class="d-none" accept=".sql" onchange="restoreBackup(this.files[0])">
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Auto-Backup</div>
+                                <div class="setting-description">Automatically backup database</div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="autoBackup">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <div class="setting-label">Backup Frequency</div>
+                                <div class="setting-description">How often to create backups</div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="backupFrequency">
+                                    <option value="daily">Daily</option>
+                                    <option value="weekly">Weekly</option>
+                                    <option value="monthly">Monthly</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api-utils.js"></script>
+    <script src="../js/notifications.js"></script>
+    <script src="../js/settings.js"></script>
+</body>
+</html>
+

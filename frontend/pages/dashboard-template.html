@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMRAS - Admin Dashboard</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <!-- Logo/Brand -->
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+
+            <!-- Toggle Sidebar Button (Mobile) -->
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <!-- Search Bar -->
+            <div class="d-none d-md-flex flex-grow-1 mx-4">
+                <div class="input-group search-bar">
+                    <span class="input-group-text bg-white border-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-0" placeholder="Search items, suppliers, orders...">
+                </div>
+            </div>
+
+            <!-- Right Side Menu -->
+            <div class="navbar-nav ms-auto flex-row align-items-center">
+                <!-- Notifications -->
+                <div class="nav-item dropdown me-3">
+                    <a class="nav-link position-relative text-white" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-bell fa-lg"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge">
+                            3
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown">
+                        <li><h6 class="dropdown-header">Notifications</h6></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-exclamation-circle text-warning me-2"></i>Low stock alert</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-clock text-info me-2"></i>PO approval pending</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle text-success me-2"></i>GRN received</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-center" href="#">View all notifications</a></li>
+                    </ul>
+                </div>
+
+                <!-- User Profile Dropdown -->
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar me-2">
+                            <i class="fas fa-user-circle fa-2x"></i>
+                        </div>
+                        <div class="d-none d-md-block text-start">
+                            <div class="user-name" id="userName">Loading...</div>
+                            <div class="user-role small" id="userRole">-</div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+            <button class="btn btn-link text-white d-none d-lg-block" id="sidebarCollapse">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-page="dashboard">
+                        <i class="fas fa-home me-2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="inventory">
+                        <i class="fas fa-box me-2"></i>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="purchase-orders">
+                        <i class="fas fa-shopping-cart me-2"></i>
+                        <span>Purchase Orders</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="suppliers">
+                        <i class="fas fa-truck me-2"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-page="reports">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        <span>Reports & Analytics</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="adminMenu" style="display: none;">
+                    <a class="nav-link" href="#" data-page="users">
+                        <i class="fas fa-users me-2"></i>
+                        <span>User Management</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="adminMenu2" style="display: none;">
+                    <a class="nav-link" href="#" data-page="settings">
+                        <i class="fas fa-cog me-2"></i>
+                        <span>System Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <span>Version 1.0.0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Welcome Section -->
+        <div class="welcome-section mb-4">
+            <h2 class="welcome-title">Welcome back, <span id="welcomeUserName">User</span>!</h2>
+            <p class="welcome-subtitle">Here's what's happening with your inventory today.</p>
+        </div>
+
+        <!-- Quick Stats Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-value" id="statTotalItems">-</h3>
+                        <p class="stat-label">Total Items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-value" id="statActiveOrders">-</h3>
+                        <p class="stat-label">Active Orders</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-value" id="statLowStock">-</h3>
+                        <p class="stat-label">Low Stock Items</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-value" id="statSuppliers">-</h3>
+                        <p class="stat-label">Active Suppliers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Inventory Trends
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-placeholder">
+                            <p class="text-muted text-center py-5">
+                                <i class="fas fa-chart-line fa-3x mb-3 d-block"></i>
+                                Chart will be integrated here
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i class="fas fa-list me-2"></i>
+                            Recent Activity
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <i class="fas fa-circle text-success"></i>
+                                <div class="activity-content">
+                                    <p class="activity-text">GRN #GRN2025001 received</p>
+                                    <span class="activity-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-circle text-info"></i>
+                                <div class="activity-content">
+                                    <p class="activity-text">PO #PO2025005 approved</p>
+                                    <span class="activity-time">5 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <i class="fas fa-circle text-warning"></i>
+                                <div class="activity-content">
+                                    <p class="activity-text">Low stock alert: Basmati Rice</p>
+                                    <span class="activity-time">1 day ago</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders Table -->
+        <div class="dashboard-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title">
+                    <i class="fas fa-table me-2"></i>
+                    Recent Purchase Orders
+                </h5>
+                <a href="#" class="btn btn-sm btn-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>PO Number</th>
+                                <th>Supplier</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentOrdersTable">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">
+                        <i class="far fa-copyright"></i> 2025 IMRAS. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="mb-0">Version 1.0.0</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+</body>
+</html>
+

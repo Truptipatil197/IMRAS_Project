@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Requisitions - IMRAS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link" href="admin-dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="purchase-requisitions.html"><i class="fas fa-file-alt"></i><span>Purchase Requests</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="purchase-orders.html"><i class="fas fa-shopping-cart"></i><span>Purchase Orders</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="suppliers.html"><i class="fas fa-truck"></i><span>Suppliers</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="warehouses.html"><i class="fas fa-warehouse"></i><span>Warehouses</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <div class="container-fluid">
+            <nav aria-label="breadcrumb" class="mt-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Purchase Requests</li>
+                </ol>
+            </nav>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2><i class="fas fa-file-alt me-2"></i>Purchase Requisitions</h2>
+                    <p class="text-muted mb-0">Monitor and approve purchase requests</p>
+                </div>
+                <button class="btn btn-primary" id="refreshBtn"><i class="fas fa-sync-alt me-2"></i>Refresh</button>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-primary"><i class="fas fa-clock fa-2x"></i></div>
+                                <div>
+                                    <div class="text-muted small">Pending</div>
+                                    <h4 class="mb-0" id="pendingCount">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-success"><i class="fas fa-check-circle fa-2x"></i></div>
+                                <div>
+                                    <div class="text-muted small">Approved</div>
+                                    <h4 class="mb-0" id="approvedCount">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-danger"><i class="fas fa-times-circle fa-2x"></i></div>
+                                <div>
+                                    <div class="text-muted small">Rejected</div>
+                                    <h4 class="mb-0" id="rejectedCount">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3 text-info"><i class="fas fa-shopping-cart fa-2x"></i></div>
+                                <div>
+                                    <div class="text-muted small">Converted to PO</div>
+                                    <h4 class="mb-0" id="poCount">0</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Purchase Requisitions</h5>
+                </div>
+                <div class="card-body table-responsive">
+                    <table class="table table-hover align-middle" id="prTable">
+                        <thead>
+                            <tr>
+                                <th>PR Number</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total Items</th>
+                                <th>Requested By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PR Details Modal -->
+    <div class="modal fade" id="prDetailsModal" tabindex="-1" aria-labelledby="prDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="prDetailsModalLabel">
+                        PR Details - <span id="prModalNumber"></span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <div class="text-muted small">Status</div>
+                            <div id="prModalStatus" class="fw-bold"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-muted small">Date</div>
+                            <div id="prModalDate"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-muted small">Requested By</div>
+                            <div id="prModalRequester"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-muted small">Approved By</div>
+                            <div id="prModalApprover"></div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="text-muted small">Remarks</div>
+                        <div id="prModalRemarks"></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SKU</th>
+                                    <th>Item</th>
+                                    <th>Requested Qty</th>
+                                    <th>Current Stock</th>
+                                    <th>Estimated Value</th>
+                                </tr>
+                            </thead>
+                            <tbody id="prModalItemsBody"></tbody>
+                        </table>
+                    </div>
+                    <div id="conversionArea" class="mt-4 p-3 border rounded bg-light" style="display: none;">
+                        <h6>Convert to Purchase Order</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label small">Select Supplier</label>
+                                <select id="poSupplier" class="form-select form-select-sm">
+                                    <option value="">-- Choose Supplier --</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small">Expected Delivery Date</label>
+                                <input type="date" id="poDeliveryDate" class="form-select form-select-sm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" id="convertToPoBtn" class="btn btn-primary" style="display: none;" onclick="processConversion()">
+                        <i class="fas fa-shopping-cart"></i> Create Purchase Order
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/purchase-requisitions.js"></script>
+</body>
+</html>
+

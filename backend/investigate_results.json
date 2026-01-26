@@ -1,0 +1,10 @@
+{
+  "supplier_count": 11,
+  "completed_po_count": 3,
+  "issue_count": 32,
+  "po_item_association_test": {
+    "po_id": 1,
+    "item_count": 5
+  },
+  "raw_po_items_count": 7
+}

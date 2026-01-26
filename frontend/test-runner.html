@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMRAS - Integration Test Runner</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/notifications.css">
+    <link rel="stylesheet" href="css/loading.css">
+    
+    <style>
+        body {
+            padding: 20px;
+            background: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        .test-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .test-step {
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #ddd;
+            background: #f9f9f9;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .test-step.pass {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .test-step.fail {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .test-step.running {
+            border-color: #17a2b8;
+            background: #d1ecf1;
+            animation: pulse 1.5s infinite;
+        }
+
+        .test-summary {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .summary-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            margin: 10px;
+            min-width: 150px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .summary-box.total {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .summary-box.passed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .summary-box.failed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .summary-box h2 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        .summary-box p {
+            margin: 8px 0 0 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .running {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .test-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .btn-test {
+            margin: 5px;
+            min-width: 200px;
+        }
+
+        .test-actions {
+            margin-top: 20px;
+        }
+
+        .progress-bar-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .progress-bar-container.active {
+            display: block;
+        }
+
+        #testStepsContainer {
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .test-step-number {
+            font-weight: bold;
+            color: #666;
+            margin-right: 8px;
+        }
+
+        .test-step-icon {
+            margin-right: 8px;
+        }
+
+        .success-rate {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .success-rate.high {
+            color: #28a745;
+        }
+
+        .success-rate.medium {
+            color: #ffc107;
+        }
+
+        .success-rate.low {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="test-header">
+            <h1>
+                <i class="fas fa-vial"></i> IMRAS Integration Test Runner
+            </h1>
+            <button class="btn btn-secondary" onclick="clearResults()">
+                <i class="fas fa-trash"></i> Clear Results
+            </button>
+        </div>
+
+        <div class="test-card">
+            <h3><i class="fas fa-list"></i> Available Test Suites</h3>
+            <div class="list-group">
+                <button class="list-group-item list-group-item-action btn-test" onclick="runTest('procurement')">
+                    <i class="fas fa-shopping-cart"></i> Complete Procurement Workflow
+                </button>
+                <button class="list-group-item list-group-item-action btn-test" onclick="runTest('reorder')">
+                    <i class="fas fa-bell"></i> Reorder Automation Workflow
+                </button>
+                <button class="list-group-item list-group-item-action btn-test" onclick="runTest('expiry')">
+                    <i class="fas fa-calendar-times"></i> Expiry Management & FEFO Workflow
+                </button>
+                <button class="list-group-item list-group-item-action btn-test" onclick="runTest('reconciliation')">
+                    <i class="fas fa-balance-scale"></i> Stock Reconciliation Workflow
+                </button>
+                <button class="list-group-item list-group-item-action list-group-item-primary btn-test" onclick="runAllTests()">
+                    <i class="fas fa-play-circle"></i> <strong>Run All Tests</strong>
+                </button>
+            </div>
+        </div>
+
+        <div id="testResults" class="test-card" style="display: none;">
+            <h3><i class="fas fa-chart-bar"></i> Test Results</h3>
+            
+            <div class="progress-bar-container" id="progressContainer">
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                         role="progressbar" 
+                         id="progressBar" 
+                         style="width: 0%">
+                    </div>
+                </div>
+                <p class="text-center mt-2" id="progressText">Initializing...</p>
+            </div>
+
+            <div class="test-summary">
+                <div class="summary-box total">
+                    <h2 id="totalSteps">0</h2>
+                    <p>Total Steps</p>
+                </div>
+                <div class="summary-box passed">
+                    <h2 id="passedSteps">0</h2>
+                    <p>Passed</p>
+                </div>
+                <div class="summary-box failed">
+                    <h2 id="failedSteps">0</h2>
+                    <p>Failed</p>
+                </div>
+            </div>
+
+            <div class="success-rate text-center" id="successRate"></div>
+
+            <div id="testStepsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Load required scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/api-utils.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/loading.js"></script>
+    <script src="test-scenarios.js"></script>
+
+    <script>
+        let currentTestResults = null;
+        let isRunning = false;
+
+        /**
+         * Run a specific test
+         */
+        async function runTest(testName) {
+            if (isRunning) {
+                Notify.warning('A test is already running. Please wait.');
+                return;
+            }
+
+            isRunning = true;
+            document.getElementById('testResults').style.display = 'block';
+            document.getElementById('progressContainer').classList.add('active');
+            document.getElementById('testStepsContainer').innerHTML = '<p class="text-center running"><i class="fas fa-spinner fa-spin"></i> Running test...</p>';
+
+            // Reset summary
+            document.getElementById('totalSteps').textContent = '0';
+            document.getElementById('passedSteps').textContent = '0';
+            document.getElementById('failedSteps').textContent = '0';
+            document.getElementById('successRate').textContent = '';
+
+            let results;
+
+            try {
+                switch(testName) {
+                    case 'procurement':
+                        updateProgress(0, 'Starting Complete Procurement Workflow Test...');
+                        results = await testCompleteProcurementWorkflow();
+                        break;
+                    case 'reorder':
+                        updateProgress(0, 'Starting Reorder Automation Workflow Test...');
+                        results = await testReorderAutomationWorkflow();
+                        break;
+                    case 'expiry':
+                        updateProgress(0, 'Starting Expiry Management & FEFO Workflow Test...');
+                        results = await testExpiryManagementWorkflow();
+                        break;
+                    case 'reconciliation':
+                        updateProgress(0, 'Starting Stock Reconciliation Workflow Test...');
+                        results = await testReconciliationWorkflow();
+                        break;
+                    default:
+                        throw new Error('Unknown test: ' + testName);
+                }
+
+                currentTestResults = results;
+                displayResults(results);
+                updateProgress(100, 'Test completed!');
+            } catch (error) {
+                console.error('Test execution error:', error);
+                Notify.error('Test execution failed: ' + error.message);
+                updateProgress(0, 'Test failed');
+            } finally {
+                isRunning = false;
+                setTimeout(() => {
+                    document.getElementById('progressContainer').classList.remove('active');
+                }, 2000);
+            }
+        }
+
+        /**
+         * Run all tests
+         */
+        async function runAllTests() {
+            if (isRunning) {
+                Notify.warning('A test is already running. Please wait.');
+                return;
+            }
+
+            isRunning = true;
+            document.getElementById('testResults').style.display = 'block';
+            document.getElementById('progressContainer').classList.add('active');
+            document.getElementById('testStepsContainer').innerHTML = '<p class="text-center running"><i class="fas fa-spinner fa-spin"></i> Running all tests...</p>';
+
+            const allResults = {
+                passed: 0,
+                failed: 0,
+                steps: []
+            };
+
+            const tests = [
+                { name: 'Complete Procurement Workflow', fn: testCompleteProcurementWorkflow },
+                { name: 'Reorder Automation Workflow', fn: testReorderAutomationWorkflow },
+                { name: 'Expiry Management & FEFO Workflow', fn: testExpiryManagementWorkflow },
+                { name: 'Stock Reconciliation Workflow', fn: testReconciliationWorkflow }
+            ];
+
+            try {
+                for (let i = 0; i < tests.length; i++) {
+                    const test = tests[i];
+                    const progress = ((i / tests.length) * 100).toFixed(0);
+                    updateProgress(progress, `Running: ${test.name}...`);
+
+                    const result = await test.fn();
+                    allResults.passed += result.passed;
+                    allResults.failed += result.failed;
+                    allResults.steps = allResults.steps.concat(result.steps.map(step => ({
+                        ...step,
+                        testName: test.name
+                    })));
+                }
+
+                currentTestResults = allResults;
+                displayResults(allResults);
+                updateProgress(100, 'All tests completed!');
+            } catch (error) {
+                console.error('Test execution error:', error);
+                Notify.error('Test execution failed: ' + error.message);
+                updateProgress(0, 'Tests failed');
+            } finally {
+                isRunning = false;
+                setTimeout(() => {
+                    document.getElementById('progressContainer').classList.remove('active');
+                }, 2000);
+            }
+        }
+
+        /**
+         * Display test results
+         */
+        function displayResults(results) {
+            const total = results.passed + results.failed;
+            document.getElementById('totalSteps').textContent = total;
+            document.getElementById('passedSteps').textContent = results.passed;
+            document.getElementById('failedSteps').textContent = results.failed;
+
+            // Calculate success rate
+            const successRate = total > 0 ? ((results.passed / total) * 100).toFixed(1) : 0;
+            const rateElement = document.getElementById('successRate');
+            rateElement.textContent = `Success Rate: ${successRate}%`;
+            rateElement.className = 'success-rate text-center';
+            
+            if (successRate >= 80) {
+                rateElement.classList.add('high');
+            } else if (successRate >= 50) {
+                rateElement.classList.add('medium');
+            } else {
+                rateElement.classList.add('low');
+            }
+
+            // Display steps
+            const container = document.getElementById('testStepsContainer');
+            container.innerHTML = '';
+
+            results.steps.forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `test-step ${step.status.toLowerCase()}`;
+
+                const icon = step.status === 'PASS' 
+                    ? '<i class="fas fa-check-circle text-success"></i>' 
+                    : '<i class="fas fa-times-circle text-danger"></i>';
+
+                let stepText = `<strong>${icon} Step ${index + 1}: ${step.step}</strong>`;
+                if (step.testName) {
+                    stepText = `<strong>${icon} [${step.testName}] Step ${index + 1}: ${step.step}</strong>`;
+                }
+
+                stepDiv.innerHTML = `
+                    ${stepText}
+                    <p class="mb-0 mt-1">${step.message}</p>
+                `;
+
+                container.appendChild(stepDiv);
+            });
+
+            // Scroll to results
+            document.getElementById('testResults').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Update progress bar
+         */
+        function updateProgress(percent, text) {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressBar.style.width = percent + '%';
+            progressBar.setAttribute('aria-valuenow', percent);
+            progressText.textContent = text || `${percent}%`;
+        }
+
+        /**
+         * Clear results
+         */
+        function clearResults() {
+            document.getElementById('testResults').style.display = 'none';
+            document.getElementById('testStepsContainer').innerHTML = '';
+            currentTestResults = null;
+        }
+
+        // Show welcome message
+        window.addEventListener('load', () => {
+            if (Notify) {
+                Notify.info('Welcome to IMRAS Test Runner. Select a test to begin.', {
+                    duration: 5000
+                });
+            }
+        });
+    </script>
+</body>
+</html>
+

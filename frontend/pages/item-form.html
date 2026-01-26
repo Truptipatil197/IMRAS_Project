@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add/Edit Item - IMRAS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
+    <link rel="stylesheet" href="../css/forms.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-boxes me-2"></i>
+                <span class="brand-text">IMRAS</span>
+            </a>
+
+            <button class="btn btn-link text-white d-lg-none" id="sidebarToggle" type="button" aria-label="Toggle sidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="d-none d-md-flex flex-grow-1 mx-4">
+                <div class="input-group search-bar">
+                    <span class="input-group-text bg-white border-0">
+                        <i class="fas fa-search text-muted"></i>
+                    </span>
+                    <input type="text" class="form-control border-0" placeholder="Search...">
+                </div>
+            </div>
+
+            <div class="navbar-nav ms-auto flex-row align-items-center">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <div class="user-avatar me-2">
+                            <i class="fas fa-user-circle fa-2x"></i>
+                        </div>
+                        <div class="d-none d-md-block text-start">
+                            <div class="user-name" id="userName">Loading...</div>
+                            <div class="user-role small" id="userRole">-</div>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h5 class="sidebar-title">Navigation</h5>
+            <button class="btn btn-link text-white d-none d-lg-block" id="sidebarCollapse" aria-label="Collapse sidebar">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="admin-dashboard.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="inventory.html">
+                        <i class="fas fa-box"></i>
+                        <span>Inventory</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <span>Version 1.0.0</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="inventory.html">Inventory</a></li>
+                    <li class="breadcrumb-item active" id="breadcrumbTitle">Add Item</li>
+                </ol>
+            </nav>
+            
+            <!-- Page Header -->
+            <div class="mb-4">
+                <h2 id="pageTitle"><i class="fas fa-plus-circle me-2"></i> Add New Item</h2>
+                <p class="text-muted">Fill in the details to add a new inventory item</p>
+            </div>
+            
+            <!-- Item Form -->
+            <form id="itemForm" novalidate>
+                <input type="hidden" id="itemId" name="item_id">
+                
+                <!-- Basic Information Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i> Basic Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="sku" class="form-label">SKU</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="sku" name="sku" 
+                                           placeholder="Auto-generated" readonly>
+                                    <button class="btn btn-outline-secondary" type="button" 
+                                            id="generateSKU" title="Generate SKU">
+                                        <i class="fas fa-random"></i>
+                                    </button>
+                                </div>
+                                <small class="form-text text-muted">Leave empty for auto-generation</small>
+                            </div>
+                            
+                            <div class="col-md-8">
+                                <label for="itemName" class="form-label">Item Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="itemName" name="item_name" 
+                                       placeholder="Enter item name" required minlength="2" maxlength="200">
+                                <div class="invalid-feedback">Item name is required (min 2 characters)</div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" 
+                                          rows="3" placeholder="Enter item description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Classification & Pricing Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-tag me-2"></i> Classification & Pricing</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="category" class="form-label">Category <span class="text-danger">*</span></label>
+                                <select class="form-select" id="category" name="category_id" required>
+                                    <option value="">Select Category</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a category</div>
+                                <small class="form-text">
+                                    <a href="categories.html" target="_blank">Manage Categories</a>
+                                </small>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="unitOfMeasure" class="form-label">Unit of Measure <span class="text-danger">*</span></label>
+                                <select class="form-select" id="unitOfMeasure" name="unit_of_measure" required>
+                                    <option value="">Select Unit</option>
+                                    <option value="Piece">Piece</option>
+                                    <option value="Kg">Kilogram (kg)</option>
+                                    <option value="Liter">Liter</option>
+                                    <option value="Meter">Meter</option>
+                                    <option value="Box">Box</option>
+                                    <option value="Carton">Carton</option>
+                                    <option value="Pack">Pack</option>
+                                    <option value="Unit">Unit</option>
+                                    <option value="Gram">Gram</option>
+                                    <option value="Bag">Bag</option>
+                                </select>
+                                <div class="invalid-feedback">Please select unit of measure</div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <label for="unitPrice" class="form-label">Unit Price (₹) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="unitPrice" name="unit_price" 
+                                       step="0.01" min="0.01" placeholder="0.00" required>
+                                <div class="invalid-feedback">Unit price must be greater than 0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Inventory Parameters Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-sliders-h me-2"></i> Inventory Parameters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <label for="reorderPoint" class="form-label">Reorder Point <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="reorderPoint" 
+                                       name="reorder_point" min="0" value="10" required>
+                                <small class="form-text text-muted">Minimum stock before reorder</small>
+                                <div class="invalid-feedback">Reorder point is required</div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label for="safetyStock" class="form-label">Safety Stock</label>
+                                <input type="number" class="form-control" id="safetyStock" 
+                                       name="safety_stock" min="0" value="5">
+                                <small class="form-text text-muted">Buffer stock quantity</small>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label for="leadTime" class="form-label">Lead Time (days)</label>
+                                <input type="number" class="form-control" id="leadTime" 
+                                       name="lead_time_days" min="0" value="7">
+                                <small class="form-text text-muted">Delivery time from supplier</small>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="is_active">
+                                    <option value="1" selected>Active</option>
+                                    <option value="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Actions -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" onclick="window.location.href='inventory.html'">
+                                <i class="fas fa-times me-2"></i> Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
+                                <i class="fas fa-save me-2"></i> <span id="submitBtnText">Save Item</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/dashboard.js"></script>
+    <script src="../js/item-form.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,2 @@
+-- Backup created at 2026-01-26T10:19:51.416Z
+-- Note: Actual backup requires mysqldump to be installed and configured

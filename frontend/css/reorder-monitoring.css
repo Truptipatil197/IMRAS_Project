@@ -1,0 +1,363 @@
+/* Reorder Monitoring Specific Styles */
+
+:root {
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --primary-color: #007bff;
+}
+
+/* Scheduler Status Badge */
+.scheduler-status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+}
+
+.scheduler-status-badge.running {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.scheduler-status-badge.stopped {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.scheduler-status-badge.executing {
+    background-color: var(--warning-color);
+    color: white;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Status Items */
+.status-item {
+    padding: 15px;
+    border-right: 1px solid #e9ecef;
+}
+
+.status-item:last-child {
+    border-right: none;
+}
+
+.status-item label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: 500;
+}
+
+.status-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Metric Cards */
+.metric-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.metric-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.metric-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    margin-right: 15px;
+}
+
+.metric-content h3 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #212529;
+}
+
+.metric-content p {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.metric-content small {
+    font-size: 0.75rem;
+}
+
+/* Status Badges in Tables */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-badge.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-badge.failed {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.status-badge.running {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.pending {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-badge.processing {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-badge.completed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* Priority Badges */
+.priority-badge {
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.priority-badge.critical {
+    background-color: #dc3545;
+    color: white;
+}
+
+.priority-badge.high {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.priority-badge.medium {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.priority-badge.low {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Priority Score Bar */
+.priority-score-bar {
+    width: 100px;
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.priority-score-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.priority-score-fill.critical {
+    background: linear-gradient(90deg, #dc3545, #c82333);
+}
+
+.priority-score-fill.high {
+    background: linear-gradient(90deg, #fd7e14, #e8590c);
+}
+
+.priority-score-fill.medium {
+    background: linear-gradient(90deg, #ffc107, #e0a800);
+}
+
+.priority-score-fill.low {
+    background: linear-gradient(90deg, #28a745, #218838);
+}
+
+/* Table Enhancements */
+.table-hover tbody tr {
+    transition: background-color 0.2s;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.table thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Action Buttons in Tables */
+.btn-action {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    margin-right: 5px;
+}
+
+/* Loading State */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 64px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.empty-state h5 {
+    margin-bottom: 10px;
+}
+
+/* Chart Container */
+canvas {
+    max-height: 400px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .status-item {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+        padding: 10px 0;
+    }
+    
+    .status-item:last-child {
+        border-bottom: none;
+    }
+    
+    .metric-card {
+        margin-bottom: 15px;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+    
+    .btn-action {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+}
+
+/* Animation for Status Changes */
+.status-change {
+    animation: statusFlash 0.5s ease;
+}
+
+@keyframes statusFlash {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Tooltip Styles */
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.custom-tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.75rem;
+}
+
+.custom-tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Page Header Styles */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.page-header h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.header-actions {
+    display: flex;
+    gap: 10px;
+}

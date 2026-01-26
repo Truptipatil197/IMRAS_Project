@@ -1,0 +1,324 @@
+/* ===== INVENTORY PAGE STYLES ===== */
+
+/* Stats Cards Enhancement */
+.stats-card {
+    transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Bulk Actions Bar */
+.bulk-actions-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 0;
+    z-index: 1040;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+/* DataTables Custom Styling */
+#itemsTable {
+    font-size: 0.9rem;
+}
+
+#itemsTable thead th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+#itemsTable tbody tr:hover {
+    background-color: #f1f3f5;
+    cursor: pointer;
+}
+
+#itemsTable tbody tr.selected {
+    background-color: #e7f3ff;
+}
+
+/* Status Badges */
+.badge.status-active {
+    background-color: #28a745;
+}
+
+.badge.status-inactive {
+    background-color: #6c757d;
+}
+
+.badge.stock-good {
+    background-color: #28a745;
+}
+
+.badge.stock-low {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.badge.stock-out {
+    background-color: #dc3545;
+}
+
+/* Action Buttons in Table */
+.action-btn {
+    padding: 5px 10px;
+    margin: 0 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.action-btn.view {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.action-btn.edit {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.action-btn.delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.action-btn i {
+    font-size: 0.85rem;
+}
+
+/* Item Image Placeholder */
+.item-image-placeholder {
+    width: 150px;
+    height: 150px;
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Warehouse Stock List */
+.warehouse-stock-item {
+    padding: 15px;
+    border-left: 4px solid #4A90E2;
+    background-color: #f8f9fa;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.warehouse-stock-item:hover {
+    background-color: #e9ecef;
+    transform: translateX(5px);
+}
+
+.warehouse-stock-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Timeline for Stock Movements */
+.timeline {
+    position: relative;
+    padding-left: 40px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: #dee2e6;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 20px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -29px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4A90E2;
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px #4A90E2;
+}
+
+.timeline-item:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-item.grn::before {
+    background-color: #28a745;
+    box-shadow: 0 0 0 2px #28a745;
+}
+
+.timeline-item.issue::before {
+    background-color: #ffc107;
+    box-shadow: 0 0 0 2px #ffc107;
+}
+
+.timeline-item.transfer::before {
+    background-color: #17a2b8;
+    box-shadow: 0 0 0 2px #17a2b8;
+}
+
+.timeline-item.adjustment::before {
+    background-color: #6f42c1;
+    box-shadow: 0 0 0 2px #6f42c1;
+}
+
+/* Category Cards */
+.category-card {
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.category-card .card-title {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Filter Card */
+.filter-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* DataTables Buttons */
+.dt-buttons {
+    margin-bottom: 15px;
+}
+
+.dt-buttons .btn {
+    margin-right: 5px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .bulk-actions-bar {
+        font-size: 0.85rem;
+        padding: 10px 0;
+    }
+    
+    .bulk-actions-bar .btn {
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+    
+    .action-btn {
+        padding: 3px 6px;
+        font-size: 0.85rem;
+        width: 28px;
+        height: 28px;
+    }
+    
+    .action-btn i {
+        font-size: 0.75rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 15px;
+    }
+}
+
+/* Loading Overlay */
+.table-loading {
+    position: relative;
+}
+
+.table-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: #dee2e6;
+    margin-bottom: 20px;
+}
+
+.empty-state h5 {
+    color: var(--secondary-color);
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Checkbox Styling */
+.item-checkbox {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+#selectAll {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
