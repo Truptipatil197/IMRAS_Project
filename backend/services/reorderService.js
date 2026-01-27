@@ -93,10 +93,9 @@ class ReorderService {
             include: [{ model: Supplier, as: 'supplier' }]
           });
 
-          if (!supplierItem) {
-            logger.warn(`No preferred supplier found for item ${item.item_id}, skipping PR creation`);
-            continue;
-          }
+          // FIXED: Get any supplier if no preferred one exists, or fallback to item pricing
+          const effectiveSupplierId = supplierItem ? supplierItem.supplier_id : null;
+          const effectiveUnitPrice = supplierItem ? (supplierItem.unit_price || item.unit_price || 0) : (item.unit_price || 0);
 
           // FIXED: Create PR automatically
           const transaction = await sequelize.transaction();
@@ -131,28 +130,42 @@ class ReorderService {
               item_id: item.item_id,
               requested_qty: Math.round(reorderQty),
               justification: `Automatic reorder - Current stock: ${currentStock}, Min stock: ${minStock}, Max stock: ${maxStock}`,
-              unit_price: supplierItem.unit_price || item.unit_price || 0,
-              total_price: Math.round(reorderQty) * (supplierItem.unit_price || item.unit_price || 0),
-              supplier_id: supplierItem.supplier_id
+              unit_price: effectiveUnitPrice,
+              total_price: Math.round(reorderQty) * effectiveUnitPrice,
+              supplier_id: effectiveSupplierId
             }, { transaction });
 
-            // FIXED: Create alert
-            const alertSeverity = currentStock === 0 ? 'Critical' : 'High';
-            await Alert.create({
-              alert_type: 'Reorder',
-              item_id: item.item_id,
-              warehouse_id: null,
-              message: `PR ${prNumber} auto-generated for ${item.item_name} (${item.sku}). Current stock: ${currentStock}, Min stock: ${minStock}, Quantity: ${Math.round(reorderQty)}`,
-              severity: alertSeverity,
-              is_read: false,
-              assigned_to: systemUser.user_id
-            }, { transaction });
+            // FIXED: Create alert (check for duplicates first)
+            const existingAlert = await Alert.findOne({
+              where: {
+                item_id: item.item_id,
+                alert_type: { [Op.in]: ['Low Stock', 'Critical Stock', 'Reorder'] },
+                is_read: false
+              },
+              transaction
+            });
 
-            console.log(`[REORDER SERVICE] Item ${item.item_id}: PR and Alert Created.`);
+            if (!existingAlert) {
+              const alertSeverity = currentStock === 0 ? 'Critical' : 'High';
+              await Alert.create({
+                alert_type: 'Reorder',
+                item_id: item.item_id,
+                warehouse_id: null,
+                message: `PR ${prNumber} auto-generated for ${item.item_name} (${item.sku}). Current stock: ${currentStock}, Min stock: ${minStock}, Quantity: ${Math.round(reorderQty)}`,
+                severity: alertSeverity,
+                is_read: false,
+                assigned_to: systemUser.user_id
+              }, { transaction });
+              stats.alertsCreated++;
+              console.log(`[REORDER SERVICE] Item ${item.item_id}: Alert Created.`);
+            } else {
+              console.log(`[REORDER SERVICE] Item ${item.item_id}: Alert skipped (already exists: ID ${existingAlert.alert_id}, Type ${existingAlert.alert_type}).`);
+            }
+
+            console.log(`[REORDER SERVICE] Item ${item.item_id}: PR Created.`);
             await transaction.commit();
 
             stats.prsCreated++;
-            stats.alertsCreated++;
 
             logger.info(`PR ${prNumber} created for item ${item.item_name} (${item.sku}) - Qty: ${Math.round(reorderQty)}`);
           } catch (prError) {

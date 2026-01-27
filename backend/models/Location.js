@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents specific storage sub-locations (Aisles, Racks, Bins) within a Warehouse.
+ * It allows for precise tracking of where an item is physically stored.
+ *
+ * Responsibility:
+ * Defining the internal layout of warehouses and facilitating efficient stock picking and placement.
+ *
+ * Fit:
+ * Child of the Warehouse model, providing granular storage addressability for items and batches.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

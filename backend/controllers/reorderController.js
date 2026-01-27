@@ -172,7 +172,7 @@ const checkReorderPoints = async (req, res) => {
         const existingAlert = await Alert.findOne({
           where: {
             item_id: item.item_id,
-            alert_type: { [Op.in]: ['Reorder', 'Critical Stock'] },
+            alert_type: { [Op.in]: ['Reorder', 'Critical Stock', 'Low Stock'] },
             is_read: false
           }
         });
@@ -224,7 +224,7 @@ const getReorderAlerts = async (req, res) => {
   try {
     const { severity, is_read, assigned_to, warehouse_id } = req.query;
     const whereClause = {
-      alert_type: { [Op.in]: ['Reorder', 'Critical Stock'] }
+      alert_type: { [Op.in]: ['Reorder', 'Critical Stock', 'Low Stock'] }
     };
     if (severity) whereClause.severity = severity;
     if (is_read !== undefined) whereClause.is_read = is_read === 'true';
@@ -451,9 +451,10 @@ const getAllPurchaseRequisitions = async (req, res) => {
         { model: PRItem, as: 'prItems', include: [{ model: Item, as: 'item', attributes: ['unit_price'] }] },
         { model: PurchaseOrder, as: 'purchaseOrders', attributes: ['po_id'], required: false }
       ],
-      order: [['pr_date', 'DESC']],
+      order: [['pr_date', 'DESC'], ['createdAt', 'DESC']],
       limit: parseInt(limit, 10),
-      offset
+      offset,
+      distinct: true
     });
 
     const mapped = rows.map(pr => {

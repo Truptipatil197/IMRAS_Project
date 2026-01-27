@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model stores system-generated alerts ranging from Low Stock notices to Expiry Warnings.
+ * It provides a notification hub for users to identify urgent inventory issues.
+ *
+ * Responsibility:
+ * Alert record keeping, tracking read/unread status, and assigning alerts to specific users for action.
+ *
+ * Fit:
+ * Communication layer of the inventory system, informing staff of critical changes and required maintenance.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

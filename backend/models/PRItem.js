@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents individual line items within a Purchase Requisition.
+ * it details the quantity requested and the justification for the request.
+ *
+ * Responsibility:
+ * Enumerating the specific items needed in a request before it is approved and converted to a PO.
+ *
+ * Fit:
+ * Child of the PurchaseRequisition model, capturing the specific stock needs of the facility.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

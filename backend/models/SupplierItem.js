@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model creates a link between Suppliers and the Items they supply.
+ * It stores supplier-specific pricing, minimum order quantities, and preferred status.
+ *
+ * Responsibility:
+ * Managing the sourcing catalog and assisting the reorder automation in choosing the best supplier for an item.
+ *
+ * Fit:
+ * Junction table between Suppliers and Items, providing the financial and lead-time data needed for procurement.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

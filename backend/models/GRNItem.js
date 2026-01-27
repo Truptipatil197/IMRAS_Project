@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents individual line items received within a Goods Receipt Note (GRN).
+ * It tracks the quantity received, accepted, and rejected.
+ *
+ * Responsibility:
+ * Recording the quality check (Inspection) of received items and determining the final stock to be added.
+ *
+ * Fit:
+ * Child of the GRN model, detailing exactly what was delivered and its condition before it enters the warehouse.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

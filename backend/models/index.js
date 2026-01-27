@@ -1,3 +1,16 @@
+/**
+ * Purpose:
+ * This file serves as the central hub for the IMRAS data models. 
+ * It imports all Sequelize model definitions and establishes the complex relationships (associations) between them.
+ *
+ * Responsibility:
+ * Model aggregation, database association definition (One-to-Many, Many-to-Many), 
+ * and providing a unified sync function to initialize the database schema.
+ *
+ * Fit:
+ * Core of the data layer that ensures referential integrity and provides a clean API for controllers to interact with data.
+ */
+
 const { sequelize } = require('../config/database');
 
 // Import all models

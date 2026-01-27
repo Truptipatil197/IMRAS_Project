@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model records the formal disposal of stock batches that have expired or are unfit for use.
+ * It captures the reason for disposal, the method used, and the associated costs.
+ *
+ * Responsibility:
+ * Documenting the withdrawal of stock from the system and maintaining an audit trail for wastage.
+ *
+ * Fit:
+ * Final life-cycle event for a batch, specifically handling stock that leaves the inventory without being issued.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

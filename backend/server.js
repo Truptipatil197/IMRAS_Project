@@ -1,3 +1,13 @@
+/**
+ * Purpose:
+ * This file is the main entry point for the IMRAS backend server.
+ * It initializes the Express application, sets up middleware, connects to the database,
+ * registers all API routes, and starts the background schedulers for reorder automation and alerts.
+ *
+ * Responsibility:
+ * Server startup, global middleware configuration, route orchestration, and graceful shutdown handling.
+ */
+
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');

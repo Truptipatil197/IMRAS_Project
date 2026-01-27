@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents the system users within the IMRAS application.
+ * It stores authentication details, personal information, and assigned roles (Admin, Manager, Staff).
+ *
+ * Responsibility:
+ * User profile management, role assignment, and providing the basis for authentication and authorization.
+ *
+ * Fit:
+ * Foundational for Role-Based Access Control (RBAC), mapping every action in the system back to a specific user.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

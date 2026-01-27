@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model defines the master catalog of items (e.g., medical supplies, medicines) managed by IMRAS.
+ * It includes essential metadata such as SKU, unit of measure, and stock threshold parameters.
+ *
+ * Responsibility:
+ * Maintaining item master data and defining reorder logic parameters (min/max stock, safety stock).
+ *
+ * Fit:
+ * Core entity of the inventory system; almost all other modules (GRN, PO, Reorder) refer to this model.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
@@ -42,7 +54,7 @@ const Item = sequelize.define('Item', {
     allowNull: false,
     validate: {
       notEmpty: true,
-      isIn: [['Kg', 'Liter', 'Piece', 'Box', 'Carton', 'Pack', 'Unit', 'Meter', 'Gram','Bag']]
+      isIn: [['Kg', 'Liter', 'Piece', 'Box', 'Carton', 'Pack', 'Unit', 'Meter', 'Gram', 'Bag']]
     }
   },
   unit_price: {

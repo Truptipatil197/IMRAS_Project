@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model tracks specific batches of items, including their manufacturing and expiry dates.
+ * It enables granular stock tracking where items are distinguished by their lot or batch number.
+ *
+ * Responsibility:
+ * Expiry management (FEFO - First Expired First Out) and tracking available quantities within specific batches.
+ *
+ * Fit:
+ * Critical for medical or perishable inventory, ensuring stock is issued or disposed based on batch validity.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

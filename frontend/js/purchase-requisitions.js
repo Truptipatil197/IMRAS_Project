@@ -191,7 +191,7 @@ async function loadSuppliersForConversion() {
         const res = await fetchWithAuth(`${CONFIG.API_BASE_URL}/api/suppliers`);
         if (!res.ok) return;
         const json = await res.json();
-        const suppliers = json.data || json.suppliers || [];
+        const suppliers = (json.data && json.data.suppliers) ? json.data.suppliers : (json.data || json.suppliers || []);
 
         const select = document.getElementById('poSupplier');
         if (!select) return;

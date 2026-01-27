@@ -17,7 +17,7 @@ class PRGenerationService {
    */
   async generatePRFromQueue(queueEntry) {
     const transaction = await sequelize.transaction();
-    
+
     try {
       // FIXED: Check if pending PR already exists for this item
       const existingPR = await PurchaseRequisition.findOne({
@@ -35,7 +35,7 @@ class PRGenerationService {
 
       if (existingPR) {
         logger.info(`Skipping PR generation for item ${queueEntry.item_id} - pending PR ${existingPR.pr_number} already exists`);
-        await queueEntry.update({ 
+        await queueEntry.update({
           status: 'skipped',
           failure_reason: `Pending PR ${existingPR.pr_number} already exists`
         }, { transaction });
@@ -49,51 +49,51 @@ class PRGenerationService {
 
       // Mark as processing
       await queueEntry.update({ status: 'processing' }, { transaction });
-      
+
       const item = await Item.findByPk(queueEntry.item_id, { transaction });
       if (!item) {
         throw new Error(`Item ${queueEntry.item_id} not found`);
       }
-      
+
       // Get optimal supplier
       const supplier = await this.selectOptimalSupplier(
         queueEntry.item_id,
         queueEntry.suggested_quantity,
         transaction
       );
-      
+
       // Determine PR status
       const rule = await ReorderRule.findActiveRuleForItem(
         queueEntry.item_id,
         queueEntry.warehouse_id
       );
       const prStatus = this.determinePRStatus(rule, queueEntry.priority_score);
-      
+
       // Calculate urgency
       const avgDemand = await demandAnalysisService.calculateAverageDailyConsumption(
         queueEntry.item_id,
         queueEntry.warehouse_id,
         60
       );
-      const daysUntilStockout = avgDemand > 0 
-        ? queueEntry.current_stock / avgDemand 
+      const daysUntilStockout = avgDemand > 0
+        ? queueEntry.current_stock / avgDemand
         : 999;
       const urgency = this.calculateUrgencyLevel(queueEntry.priority_score, daysUntilStockout);
-      
+
       // Generate PR number
       const prNumber = await this.generatePRNumber(transaction);
-      
+
       // Get system user for auto-generated PRs
       const systemUser = await User.findOne({
         where: { role: { [Op.in]: ['Admin', 'Manager'] }, is_active: true },
         order: [['user_id', 'ASC']],
         transaction
       });
-      
+
       if (!systemUser) {
         throw new Error('No system user found for auto-generated PR');
       }
-      
+
       // Create PR
       const pr = await PurchaseRequisition.create({
         pr_number: prNumber,
@@ -102,7 +102,7 @@ class PRGenerationService {
         status: prStatus,
         remarks: `Auto-generated reorder: Stock level ${queueEntry.current_stock}, Reorder point ${queueEntry.reorder_point}, Suggested quantity ${queueEntry.suggested_quantity}`
       }, { transaction });
-      
+
       // Create PR Item
       await PRItem.create({
         pr_id: pr.pr_id,
@@ -110,18 +110,33 @@ class PRGenerationService {
         requested_qty: Math.round(queueEntry.suggested_quantity),
         justification: `Automatic reorder - Current stock: ${queueEntry.current_stock}, Reorder point: ${queueEntry.reorder_point}, Priority score: ${queueEntry.priority_score}`
       }, { transaction });
-      
-      // Create alert
-      const alertSeverity = this.mapUrgencyToSeverity(urgency);
-      const alert = await Alert.create({
-        alert_type: 'Reorder',
-        item_id: queueEntry.item_id,
-        warehouse_id: queueEntry.warehouse_id,
-        message: `PR ${prNumber} generated for ${Math.round(queueEntry.suggested_quantity)} ${item.unit_of_measure}. Current stock: ${queueEntry.current_stock}, Reorder point: ${queueEntry.reorder_point}`,
-        severity: alertSeverity,
-        is_read: false
-      }, { transaction });
-      
+
+      // Create alert (check for duplicates first)
+      const existingAlert = await Alert.findOne({
+        where: {
+          item_id: queueEntry.item_id,
+          alert_type: { [Op.in]: ['Low Stock', 'Critical Stock', 'Reorder'] },
+          is_read: false
+        },
+        transaction
+      });
+
+      let alert = null;
+      if (!existingAlert) {
+        const alertSeverity = this.mapUrgencyToSeverity(urgency);
+        alert = await Alert.create({
+          alert_type: 'Reorder',
+          item_id: queueEntry.item_id,
+          warehouse_id: queueEntry.warehouse_id,
+          message: `PR ${prNumber} generated for ${Math.round(queueEntry.suggested_quantity)} ${item.unit_of_measure}. Current stock: ${queueEntry.current_stock}, Reorder point: ${queueEntry.reorder_point}`,
+          severity: alertSeverity,
+          is_read: false
+        }, { transaction });
+      } else {
+        logger.info(`Skipping duplicate alert for item ${queueEntry.item_id} (unread alert ${existingAlert.alert_id} already exists)`);
+        alert = existingAlert; // Use existing one for queue entry update
+      }
+
       // Mark queue entry as completed
       await queueEntry.update({
         status: 'completed',
@@ -129,18 +144,18 @@ class PRGenerationService {
         alert_id: alert.alert_id,
         processed_at: new Date()
       }, { transaction });
-      
+
       // Update rule's last_triggered date if rule exists
       if (rule) {
         await rule.update({
           last_triggered: new Date().toISOString().split('T')[0]
         }, { transaction });
       }
-      
+
       await transaction.commit();
-      
+
       logger.info(`PR ${prNumber} generated for item ${item.item_name} (${item.sku}) - Quantity: ${queueEntry.suggested_quantity}`);
-      
+
       return {
         success: true,
         pr,
@@ -153,13 +168,13 @@ class PRGenerationService {
     } catch (error) {
       await transaction.rollback();
       logger.error(`Error generating PR from queue entry ${queueEntry.queue_id}:`, error);
-      
+
       await queueEntry.update({
         status: 'failed',
         failure_reason: error.message,
         processed_at: new Date()
       }).catch(err => logger.error('Error updating queue entry status:', err));
-      
+
       throw error;
     }
   }
@@ -184,34 +199,34 @@ class PRGenerationService {
         }],
         transaction
       });
-      
+
       if (supplierItems.length === 0) {
         logger.warn(`No suppliers found for item ${itemId}`);
         return null;
       }
-      
+
       // Check quantity constraints
       const validSuppliers = supplierItems.filter(si => {
         const minQty = si.min_order_qty || 1;
         const maxQty = si.max_order_qty;
         return quantity >= minQty && (!maxQty || quantity <= maxQty);
       });
-      
+
       if (validSuppliers.length === 0) {
         logger.warn(`No suppliers can fulfill quantity ${quantity} for item ${itemId}`);
         return validSuppliers[0]?.supplier || null; // Return first supplier anyway
       }
-      
+
       // Score each supplier
       const scoredSuppliers = validSuppliers.map(si => {
         let score = 0;
         const supplier = si.supplier;
-        
+
         // Preferred supplier (30 points)
         if (si.is_preferred) {
           score += 30;
         }
-        
+
         // Price factor (25 points) - lower is better
         const prices = validSuppliers.map(s => parseFloat(s.unit_price || 0));
         const minPrice = Math.min(...prices.filter(p => p > 0));
@@ -220,7 +235,7 @@ class PRGenerationService {
           const priceRatio = minPrice / unitPrice;
           score += priceRatio * 25;
         }
-        
+
         // Lead time factor (20 points) - shorter is better
         const leadTimes = validSuppliers.map(s => s.supplier.avg_lead_time_days || 30);
         const minLeadTime = Math.min(...leadTimes);
@@ -229,22 +244,22 @@ class PRGenerationService {
           const leadTimeRatio = minLeadTime / leadTime;
           score += leadTimeRatio * 20;
         }
-        
+
         // Rating (15 points)
         const rating = parseFloat(supplier.performance_rating || 0);
         score += (rating / 5) * 15;
-        
+
         // Reliability (10 points) - based on performance rating
         score += (rating / 5) * 10;
-        
+
         return { supplierItem: si, supplier, score: parseFloat(score.toFixed(2)) };
       });
-      
+
       // Sort by score and return best
       scoredSuppliers.sort((a, b) => b.score - a.score);
-      
+
       logger.debug(`Selected supplier ${scoredSuppliers[0].supplier.supplier_name} (score: ${scoredSuppliers[0].score}) for item ${itemId}`);
-      
+
       return scoredSuppliers[0].supplier;
     } catch (error) {
       logger.error(`Error selecting optimal supplier for item ${itemId}:`, error);
@@ -375,7 +390,7 @@ class PRGenerationService {
     if (avgDailyDemand === 0 || currentStock <= 0) {
       return null;
     }
-    
+
     const daysUntilStockout = currentStock / avgDailyDemand;
     const date = new Date();
     date.setDate(date.getDate() + Math.floor(daysUntilStockout));
@@ -418,7 +433,7 @@ class PRGenerationService {
       }
 
       logger.info(`PR generation batch completed: ${stats.processed} processed, ${stats.successful} successful, ${stats.failed} failed`);
-      
+
       return stats;
     } catch (error) {
       logger.error('Error processing queue batch:', error);

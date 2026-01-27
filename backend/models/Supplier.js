@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model manages the directory of external vendors and suppliers who provide items to IMRAS.
+ * It stores contact details, payment terms, and overall performance metrics.
+ *
+ * Responsibility:
+ * Supplier relationship management and providing data for procurement and performance analysis.
+ *
+ * Fit:
+ * Essential for the procurement cycle, linking items to their sources and tracking purchase order history.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

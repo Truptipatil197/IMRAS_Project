@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model serves as the transaction log for every stock movement in the system (Receipts, Issues, Transfers).
+ * It provides a complete audit trail of how stock levels change over time.
+ *
+ * Responsibility:
+ * Recording transaction history, maintaining running balances, and providing data for reports and analytics.
+ *
+ * Fit:
+ * The single source of truth for all inventory changes, used to calculate current stock and verify movements.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

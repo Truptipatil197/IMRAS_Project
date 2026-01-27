@@ -94,8 +94,8 @@ router.get('/dashboard', verifyToken, async (req, res) => {
 
         // 2. PR / PO / Alert Counts
         const [unreadAlerts, criticalAlerts, pendingPRs, activePOs] = await Promise.all([
-            Alert.count({ where: { is_read: false, alert_type: { [Op.in]: ['Reorder', 'Critical Stock'] } } }),
-            Alert.count({ where: { severity: 'Critical', alert_type: { [Op.in]: ['Reorder', 'Critical Stock'] } } }),
+            Alert.count({ where: { is_read: false, alert_type: { [Op.in]: ['Reorder', 'Critical Stock', 'Low Stock'] } } }),
+            Alert.count({ where: { severity: 'Critical', alert_type: { [Op.in]: ['Reorder', 'Critical Stock', 'Low Stock'] } } }),
             PurchaseRequisition.count({ where: { status: 'Pending' } }),
             PurchaseOrder.count({ where: { status: { [Op.in]: ['Issued', 'In-Transit'] } } })
         ]);
@@ -132,7 +132,7 @@ router.get('/dashboard', verifyToken, async (req, res) => {
 router.get('/alerts', verifyToken, async (req, res) => {
     try {
         const alerts = await Alert.findAll({
-            where: { alert_type: { [Op.in]: ['Reorder', 'Critical Stock'] } },
+            where: { alert_type: { [Op.in]: ['Reorder', 'Critical Stock', 'Low Stock'] } },
             order: [['createdAt', 'DESC']]
         });
 

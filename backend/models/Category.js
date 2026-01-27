@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model defines the various categories of items (e.g., Antibiotics, Consumables, Lab Supplies).
+ * It enables organized classification and filtering of the item master.
+ *
+ * Responsibility:
+ * Maintaining the category taxonomies used throughout the system for reporting and organization.
+ *
+ * Fit:
+ * Foundational structural entity that groups items, making the inventory manageable and searchable.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

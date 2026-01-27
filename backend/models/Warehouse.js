@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model defines the physical warehouses or storage facilities within the IMRAS system.
+ * It stores location details and contact information for each facility.
+ *
+ * Responsibility:
+ * Managing warehouse master data and serving as a parent entity for storage locations.
+ *
+ * Fit:
+ * Highest level of the physical storage hierarchy, grouping multiple locations and tracking stock at a facility level.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

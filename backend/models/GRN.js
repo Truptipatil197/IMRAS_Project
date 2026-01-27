@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents a Goods Receipt Note (GRN), which records the actual physical receipt of items.
+ * It links the received goods back to the original Purchase Order.
+ *
+ * Responsibility:
+ * Confirming the delivery of goods and serving as the trigger for updating stock levels in the warehouse.
+ *
+ * Fit:
+ * Critical point in the inventory cycle where external goods are officially taken into the system's ownership.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

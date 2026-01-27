@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents individual line items within a Purchase Order.
+ * It stores the specific quantity and unit price for each item being ordered.
+ *
+ * Responsibility:
+ * Breaking down a Purchase Order into specific items and calculating their individual total costs.
+ *
+ * Fit:
+ * Child of the PurchaseOrder model, providing the granular list of what is expected from the supplier.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

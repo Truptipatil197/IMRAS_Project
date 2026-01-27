@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model represents a formal Purchase Order (PO) issued to a supplier for replenishing stock.
+ * It tracks the order date, supplier, transaction total, and delivery status.
+ *
+ * Responsibility:
+ * Managing the procurement transaction lifecycle (Issued, In-Transit, Completed, Cancelled).
+ *
+ * Fit:
+ * Final bridge between the internal requisition and external supply receipt (GRN).
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 

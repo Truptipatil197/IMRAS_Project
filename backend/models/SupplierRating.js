@@ -1,3 +1,15 @@
+/**
+ * Purpose:
+ * This model stores quality and performance ratings for suppliers based on specific Purchase Orders.
+ * It tracks metrics like delivery speed, quality of goods, and pricing accuracy.
+ *
+ * Responsibility:
+ * Facilitating supplier performance evaluation and data-driven procurement decisions.
+ *
+ * Fit:
+ * Part of the procurement feedback loop, helping the system identify reliable and high-performing partners.
+ */
+
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/database');
 
